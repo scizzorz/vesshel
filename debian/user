@@ -1,0 +1,7 @@
+# vim: set ft=dockerfile:
+ARG user
+
+RUN useradd --create-home $user -G sudo && \
+    echo $user":rootpw" | chpasswd
+USER $user
+WORKDIR /home/$user

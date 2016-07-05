@@ -1,0 +1,10 @@
+# vim: set ft=dockerfile:
+ARG user
+
+RUN groupadd sudo && \
+    echo "%sudo ALL=(ALL) ALL" >> /etc/sudoers && \
+    echo "Defaults env_keep += \"http_proxy https_proxy\"" >> /etc/sudoers && \
+    useradd --create-home $user -G sudo && \
+    echo $user":rootpw" | chpasswd
+USER $user
+WORKDIR /home/$user

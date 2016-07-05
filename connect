@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# regular ssh
+if [ "$SSH_ORIGINAL_COMMAND" = "" ]; then
+  exec $SHELL
+
+# check if they're asking for a project
+elif [[ "$SSH_ORIGINAL_COMMAND" == +* ]]; then
+  VESSHEL=$(realpath $(dirname "$0"))
+  PROJ=${SSH_ORIGINAL_COMMAND/+/}
+
+  echo "Loading '$PROJ'"
+  cd $VESSHEL
+  ./build $PROJ
+  ./run $PROJ
+
+# just run the orginal command
+else
+  exec $SSH_ORIGINAL_COMMAND
+fi

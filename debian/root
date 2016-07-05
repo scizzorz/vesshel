@@ -1,0 +1,10 @@
+# vim: set ft=dockerfile:
+FROM debian:jessie
+
+ENV INSTALL 'apt-get install -qq -y'
+
+RUN apt-get update && \
+    apt-get upgrade -qq -y && \
+    $INSTALL sudo wget git
+
+CMD /bin/bash

@@ -1,0 +1,9 @@
+#!/bin/bash
+while read -e tmp; do
+  if [[ $tmp == Step* ]]; then
+    echo
+    echo -n "${tmp/Step [[:digit:]]* :/$}"
+  fi
+  echo -n "."
+done
+echo

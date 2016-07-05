@@ -1,0 +1,18 @@
+# vim: set ft=dockerfile:
+FROM base/archlinux
+
+RUN curl -o /etc/pacman.d/mirrorlist "https://www.archlinux.org/mirrorlist/?country=all&protocol=https&ip_version=6&use_mirror_status=on" && sed -i 's/^#//' /etc/pacman.d/mirrorlist
+
+ENV INSTALL 'pacman --noprogressbar --noconfirm -S'
+
+RUN pacman-key --populate
+RUN pacman-key --refresh-keys
+RUN pacman -Sy --noprogressbar --noconfirm
+RUN pacman -Sy --noprogressbar --noconfirm archlinux-keyring
+RUN pacman -S --force openssl --noconfirm
+RUN $INSTALL pacman
+RUN pacman-db-upgrade
+RUN pacman -Syyu --noprogressbar --noconfirm
+RUN $INSTALL sudo wget git
+
+CMD /bin/bash

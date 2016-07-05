@@ -1,0 +1,7 @@
+#!/bin/bash
+
+VESSHEL=$(realpath $(dirname "$0"))
+PROJ="$1"
+FRAGS=$(echo $PROJ | sed 's/\./ /g')
+
+docker run -h "$PROJ" -it "$PROJ"
