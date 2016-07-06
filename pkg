@@ -1,0 +1,29 @@
+#!/bin/bash
+
+VESSHEL=$(realpath $(dirname "$0"))
+PROJ="$1"
+OUT="$2"
+FRAGS=$(echo $PROJ | sed 's/\./ /g')
+
+# join all the root fragments
+for x in $FRAGS; do
+  if [ -d ~/$x ]; then
+    x=~/$x
+  elif [ -d $VESSHEL/$x ]; then
+    x=$VESSHEL/$x
+  else
+    echo "Unable to find fragment '$x'"
+    exit
+  fi
+
+  echo "#### $x/root" >> $OUT/root
+  cat "$x/root" >> $OUT/root
+  echo >> $OUT/root
+
+  echo "#### $x/user" >> $OUT/user
+  cat "$x/user" >> $OUT/user
+  echo >> $OUT/user
+done
+
+cat $OUT/root $OUT/user > $OUT/Dockerfile
+rm $OUT/root $OUT/user

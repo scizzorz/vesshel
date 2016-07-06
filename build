@@ -8,28 +8,7 @@ FRAGS=$(echo $PROJ | sed 's/\./ /g')
 TMP=$(mktemp -d)
 touch $TMP/root $TMP/user
 
-# join all the root fragments
-for x in $FRAGS; do
-  if [ -d ~/$x ]; then
-    x=~/$x
-  elif [ -d $VESSHEL/$x ]; then
-    x=$VESSHEL/$x
-  else
-    echo "Unable to find fragment '$x'"
-    exit
-  fi
-
-  echo "#### $x/root" >> $TMP/root
-  cat "$x/root" >> $TMP/root
-  echo >> $TMP/root
-
-  echo "#### $x/user" >> $TMP/user
-  cat "$x/user" >> $TMP/user
-  echo >> $TMP/user
-done
-
-cat $TMP/root $TMP/user > $TMP/Dockerfile
-rm $TMP/root $TMP/user
+$VESSHEL/pkg $PROJ $TMP
 
 # build docker image
 cd $TMP
