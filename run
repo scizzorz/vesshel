@@ -3,5 +3,6 @@
 VESSHEL=$(realpath $(dirname "$0"))
 PROJ="$1"
 FRAGS=$(echo $PROJ | sed 's/\./ /g')
+shift 1
 
-docker run -h "$PROJ" -it "$PROJ"
+docker run -h "$PROJ" -i $@ -t "$PROJ"
