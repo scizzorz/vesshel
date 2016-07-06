@@ -5,8 +5,10 @@ PROJ="$1"
 OUT="$2"
 FRAGS=$(echo $PROJ | sed 's/\./ /g')
 
-# join all the root fragments
+touch $OUT/Dockerfile.root $OUT/Dockerfile.user
+
 for x in $FRAGS; do
+  # look for the fragment in ~ and $VESSHEL/
   if [ -d ~/$x ]; then
     x=~/$x
   elif [ -d $VESSHEL/$x ]; then
@@ -16,14 +18,20 @@ for x in $FRAGS; do
     exit
   fi
 
-  echo "#### $x/root" >> $OUT/root
-  cat "$x/root" >> $OUT/root
-  echo >> $OUT/root
+  # copy all the extra files
+  cp -r $x/* $OUT/
 
-  echo "#### $x/user" >> $OUT/user
-  cat "$x/user" >> $OUT/user
-  echo >> $OUT/user
+  # add the root piece
+  echo "#### $x/root" >> $OUT/Dockerfile.root
+  cat "$x/root" >> $OUT/Dockerfile.root
+  echo >> $OUT/Dockerfile.root
+
+  # add the user piece
+  echo "#### $x/user" >> $OUT/Dockerfile.user
+  cat "$x/user" >> $OUT/Dockerfile.user
+  echo >> $OUT/Dockerfile.user
 done
 
-cat $OUT/root $OUT/user > $OUT/Dockerfile
-rm $OUT/root $OUT/user
+# join all the root and user pieces
+cat $OUT/Dockerfile.root $OUT/Dockerfile.user > $OUT/Dockerfile
+rm $OUT/Dockerfile.root $OUT/Dockerfile.user

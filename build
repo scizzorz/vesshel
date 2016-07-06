@@ -6,7 +6,6 @@ FRAGS=$(echo $PROJ | sed 's/\./ /g')
 
 # make a clean temp directory
 TMP=$(mktemp -d)
-touch $TMP/root $TMP/user
 
 $VESSHEL/pkg $PROJ $TMP
 
