@@ -12,7 +12,8 @@ RUN pacman -Sy --noprogressbar --noconfirm archlinux-keyring
 RUN pacman -S --force openssl --noconfirm
 RUN $INSTALL pacman
 RUN pacman-db-upgrade
+RUN echo "[multilib]" >> /etc/pacman.conf && echo "Include = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
 RUN pacman -Syyu --noprogressbar --noconfirm
-RUN $INSTALL sudo wget git
+RUN $INSTALL sudo wget git openssh binutils
 
 CMD /bin/bash
